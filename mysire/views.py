@@ -13,6 +13,7 @@ from rest_framework.views import APIView
 #from rest_framework.decorators import api_view,parser_classes
 from rest_framework.parsers import FileUploadParser
 from rest_framework.response import Response
+import json
 
 def main(request):
     return render (request, 'main.html')
@@ -64,3 +65,11 @@ class FileUploadView(APIView):
                 books['categories'] = ['new']
             print(books['title'], books['categories'])
         return Response(status=204)
+    
+def categories(request):
+    url = 'https://gitlab.grokhotov.ru/hr/yii-test-vacancy/-/raw/master/books.json'
+    r = request.get(url)
+    res = json.load(r.text)
+    for book in res['data']:
+        Books.objects.create(id = book['id'], name=book['titles'], cat = book['categories'])
+    return render (request, 'categs.html',{"categorie":Books.objects.all()})

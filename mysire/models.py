@@ -9,3 +9,7 @@ class Contact(models.Model):
     def __str__(self):
         # Будет отображаться следующее поле в панели администрирования
         return self.email
+    
+class Books(models.Model):
+    titles = models.CharField(max_length=200)
+    categories = models.CharField(max_length=200)
