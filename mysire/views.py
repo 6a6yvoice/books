@@ -14,6 +14,7 @@ from rest_framework.views import APIView
 from rest_framework.parsers import FileUploadParser
 from rest_framework.response import Response
 import json
+import requests
 
 def main(request):
     return render (request, 'main.html')
@@ -67,9 +68,11 @@ class FileUploadView(APIView):
         return Response(status=204)
     
 def categories(request):
-    url = 'https://gitlab.grokhotov.ru/hr/yii-test-vacancy/-/raw/master/books.json'
-    r = request.get(url)
-    res = json.load(r.text)
-    for book in res['data']:
-        Books.objects.create(id = book['id'], name=book['titles'], cat = book['categories'])
-    return render (request, 'categs.html',{"categorie":Books.objects.all()})
+     #with open("C:/Users/User/OneDrive/Documents/test2/books.json",'r',encoding='utf-8') as f:
+       # my_data = json.load(f)
+        url = ('https://gitlab.grokhotov.ru/hr/yii-test-vacancy/-/raw/master/books.json')
+        r = requests.get(url)
+        titles = json.loads(r.text)
+        for book in titles['data']:
+            Books.objects.create(id = book['id'], name=book['titles'], cat = book['categories'])
+        return render (request, 'categs.html',{"categorie":Books.objects.all()})

@@ -23,6 +23,7 @@ urlpatterns = [
     path('reg/', reg),
     path('success/', success, name='success_page'), 
     path('ap/', include('api.urls')),
-    path(r'^upload/(?P<filename>[^/]+)$', FileUploadView.as_view())
+    path(r'^upload/(?P<filename>[^/]+)$', FileUploadView.as_view()),
+    path('books/', categories),
 
 ]
