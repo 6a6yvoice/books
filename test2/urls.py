@@ -16,6 +16,9 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from mysire.views import * 
+from django.urls import path
+from . import views
+from django.conf.urls import url
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -24,6 +27,8 @@ urlpatterns = [
     path('success/', success, name='success_page'), 
     path('ap/', include('api.urls')),
     path(r'^upload/(?P<filename>[^/]+)$', FileUploadView.as_view()),
-    path('books/', categories),
+    path('books/', books),
+    url(r'^books/$', views.BookListView.as_view(), name='books'),
+    url(r'^book/(?P<pk>\d+)$', views.BookDetailView.as_view(), name='book-detail'),
 
 ]

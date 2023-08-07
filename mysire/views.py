@@ -1,9 +1,12 @@
+from typing import Any
+from django.db.models.query import QuerySet
 from django.forms.models import BaseModelForm
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from django.http import HttpResponse
 from django.views.generic import CreateView
+from django.views import generic
 from .models import *
 from django.core.mail import send_mail
 from django.urls import reverse_lazy
@@ -67,12 +70,29 @@ class FileUploadView(APIView):
             print(books['title'], books['categories'])
         return Response(status=204)
     
-def categories(request):
-     #with open("C:/Users/User/OneDrive/Documents/test2/books.json",'r',encoding='utf-8') as f:
-       # my_data = json.load(f)
-        url = ('https://gitlab.grokhotov.ru/hr/yii-test-vacancy/-/raw/master/books.json')
-        r = requests.get(url)
-        titles = json.loads(r.text)
-        for book in titles['data']:
-            Books.objects.create(id = book['id'], name=book['titles'], cat = book['categories'])
-        return render (request, 'categs.html',{"categorie":Books.objects.all()})
+#def categories(request):
+#     #with open("C:/Users/User/OneDrive/Documents/test2/books.json",'r',encoding='utf-8') as f:
+#       # my_data = json.load(f)
+#        url = ('https://gitlab.grokhotov.ru/hr/yii-test-vacancy/-/raw/master/books.json')
+#        r = requests.get(url)
+#        titles = json.loads(r.text)
+#        for book in titles['data']:
+#            Books.objects.create(id = book['id'], name=book['titles'], cat = book['categories'])
+#        return render (request, 'categs.html',{"categorie":Books.objects.all()})
+
+def books(request):
+    res = []
+    if request.method == "POST":
+        data = request.POST 
+        res = Books.objects.filter(Name = data["search"])
+    cat_list = Books.objects.all()
+    prod = Books.objects.all()
+    return render(request, 'navbar.html',{"cat":cat_list, "search":res, "prod":prod})
+
+class BookListView(generic.ListView):
+    model = Books 
+    context_object_name = 'book_list'
+    paginate_by = 10 
+    def get_queryset(self):
+        return Books.objects.filter(Name= 'Java')[:10]
+    
