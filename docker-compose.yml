@@ -1,0 +1,26 @@
+version: "3.9"
+
+services:
+  db:
+    image: nouchka/sqlite3:latest
+    container_name: my_docker
+    volumes:
+      - ./db:/C:/Users/rogin/Documents/test2/db.sqlite3/
+    env_file:
+      -.env 
+
+  test: 
+    image: my_docker:latest
+    container_name: my_docker
+    depends_on:
+      - db
+    volumes:
+      - static_volume:/yt/static
+      - media_volume:/yt/media
+    env_file:
+      - .env
+    command: >
+      bash -c "./manage.py collectstatic --noinput && ./manage.py migrate && python manage.py runserver 0.0.0.0:8000 "
+
+
+

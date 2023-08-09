@@ -79,7 +79,12 @@ WSGI_APPLICATION = 'test2.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'HOST': os.getenv('SQLLITE3_HOST', 'localhost'),
+        'PORT': os.getenv('SQLLITE3_PORT', 8000),
+        'USER': os.getenv('SQLLITE3_USER', 'user'), 
+        'PASSWORD':os.getenv('SQLLITE3_PASSWORD'),
+        'NAME': os.getenv('SQLLITE3_DB', "db.sqlite3"),
+
     }
 }
 
@@ -131,6 +136,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = 'static'
+MEDIA_ROOT = 'media'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
